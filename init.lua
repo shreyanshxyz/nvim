@@ -124,6 +124,7 @@ vim.keymap.set('n', '<leader>o', ':Neotree reveal position=left<CR>', { noremap 
 vim.keymap.set({'n', 'v'}, '<C-c>', '"+y', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-x>', '"+dd', { noremap = true, silent = true })
 vim.keymap.set('v', '<C-x>', '"+x', { noremap = true, silent = true })
+vim.keymap.set({'n', 'i'}, '<C-s>', '<cmd>w<CR>', { noremap = true, silent = true })
 
 require('lsp')
 vim.api.nvim_set_keymap('n', '<leader>pf', '<cmd>Telescope find_files<cr>', { noremap = true, silent = true })
