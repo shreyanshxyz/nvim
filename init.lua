@@ -33,6 +33,53 @@ vim.opt.clipboard = 'unnamedplus'
 
 require('lazy').setup({
   {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    lazy = false,
+  },
+  {
+    'HiPhish/rainbow-delimiters.nvim',
+    event = { 'BufReadPost', 'BufNewFile' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+  },
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    dependencies = { 'nvim-cmp' },
+    config = function()
+      require('nvim-autopairs').setup({
+        check_ts = true,
+        ts_config = {
+          lua = { 'string' },
+          javascript = { 'template_string' },
+        }
+      })
+      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+      local cmp = require('cmp')
+      cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+    end,
+  },
+  {
+    'kylechui/nvim-surround',
+    version = '*',
+    event = 'VeryLazy',
+    config = function()
+      require('nvim-surround').setup()
+    end,
+  },
+
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    event = { 'BufReadPost', 'BufNewFile' },
+    main = 'ibl',
+    config = function()
+      require('ibl').setup({
+        indent = { char = '│' },
+        scope = { enabled = true },
+      })
+    end,
+  },
+  {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.8',
     dependencies = { {'nvim-lua/plenary.nvim'} }
@@ -213,5 +260,17 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 require('lsp')
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    vim.schedule(function()
+      require('nvim-treesitter.config').setup({
+        highlight = { enable = true },
+        indent = { enable = true },
+      })
+    end)
+  end,
+})
+
 vim.api.nvim_set_keymap('n', '<leader>pf', '<cmd>Telescope find_files<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ps', '<cmd>Telescope live_grep<cr>', { noremap = true, silent = true })
