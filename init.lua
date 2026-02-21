@@ -81,7 +81,6 @@ require('lazy').setup({
   },
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.8',
     dependencies = { {'nvim-lua/plenary.nvim'} }
   },
   {
@@ -124,6 +123,12 @@ require('lazy').setup({
       require('neo-tree').setup({
         close_if_last_window = false,
         filesystem = {
+          filtered_items = {
+            visible = false,
+            hide_dotfiles = false,
+            hide_gitignored = false,
+            hide_by_name = { '.next', 'node_modules', '.git', '__pycache__', '.pytest_cache', '.venv', 'venv', '.DS_Store' },
+          },
           follow_current_file = { enabled = true },
           hijack_netrw_behavior = 'disabled',
         },
@@ -280,5 +285,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
 })
 
-vim.api.nvim_set_keymap('n', '<leader>pf', '<cmd>Telescope find_files<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>pf', function()
+  require('telescope.builtin').find_files({ hidden = true, no_ignore = true, file_ignore_patterns = { '.next', 'node_modules', '.git', '__pycache__', '.pytest_cache', '.venv', 'venv', '.DS_Store' } })
+end, { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ps', '<cmd>Telescope live_grep<cr>', { noremap = true, silent = true })
