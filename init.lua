@@ -140,6 +140,10 @@ require('lazy').setup({
     end,
   },
   {
+    'tpope/vim-fugitive',
+    cmd = { 'Git', 'Gdiffsplit', 'Gwrite' },
+  },
+  {
     'Exafunction/windsurf.vim',
     event = 'BufEnter',
     config = function()
@@ -250,6 +254,10 @@ vim.keymap.set('n', '<leader>dd', '<cmd>CodeDiff<CR>', { noremap = true, silent 
 vim.keymap.set('n', '<leader>df', '<cmd>CodeDiff file HEAD<CR>', { noremap = true, silent = true, desc = 'Diff current file vs HEAD' })
 vim.keymap.set('n', '<leader>dh', '<cmd>CodeDiff history<CR>', { noremap = true, silent = true, desc = 'Open file history' })
 vim.keymap.set('n', '<leader>dm', '<cmd>CodeDiff merge<CR>', { noremap = true, silent = true, desc = 'Open merge conflict view' })
+
+vim.keymap.set('n', '<leader>cc', function() require('git-commit').ai_commit() end, { desc = 'AI commit (Ollama)' })
+vim.keymap.set('n', '<leader>cm', '<cmd>Git commit -v<CR>', { desc = 'Manual commit with diff' })
+vim.keymap.set('n', '<leader>ca', '<cmd>Git commit --amend<CR>', { desc = 'Amend last commit' })
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'codediff',
