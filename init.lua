@@ -274,6 +274,14 @@ vim.keymap.set('n', '<leader>cc', function() require('git-commit').ai_commit() e
 vim.keymap.set('n', '<leader>cm', '<cmd>Git commit -v<CR>', { desc = 'Manual commit with diff' })
 vim.keymap.set('n', '<leader>ca', '<cmd>Git commit --amend<CR>', { desc = 'Amend last commit' })
 
+vim.keymap.set('n', '<leader>ai', function()
+  local enabled = vim.g.codeium_enabled
+  if enabled == nil then enabled = true end
+  vim.g.codeium_enabled = not enabled
+  local status = vim.g.codeium_enabled and 'enabled' or 'disabled'
+  vim.notify(string.format('Windsurf AI autocomplete %s', status), vim.log.levels.INFO)
+end, { desc = 'Toggle Windsurf AI autocomplete' })
+
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'codediff',
   callback = function()
