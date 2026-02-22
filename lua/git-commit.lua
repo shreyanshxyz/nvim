@@ -1,7 +1,7 @@
 local M = {}
 
 M.config = {
-  model = 'llama3.2',
+  model = 'kimi-k2.5:cloud',
   ollama_url = 'http://localhost:11434/api/generate',
   max_diff_size = 4000,
 }
