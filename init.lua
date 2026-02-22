@@ -86,20 +86,16 @@ require('lazy').setup({
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v4.x',
-    lazy = true,
     config = false,
   },
   {
     'neovim/nvim-lspconfig',
-    lazy = true,
   },
   {
     'williamboman/mason.nvim',
-    lazy = true,
   },
   {
     'williamboman/mason-lspconfig.nvim',
-    lazy = true,
   },
   {
     'hrsh7th/nvim-cmp',
@@ -161,18 +157,32 @@ require('lazy').setup({
     config = function()
       require('lualine').setup({
         options = {
-          theme = 'catppuccin'
+          theme = 'everforest'
         }
       })
     end,
   },
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
+    'sainnhe/everforest',
+    lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme('catppuccin-mocha')
+      vim.g.everforest_background = 'medium'
+      vim.g.everforest_enable_italic = 1
+      vim.cmd.colorscheme('everforest')
     end,
+  },
+  {
+    'folke/which-key.nvim',
+    event = 'VeryLazy',
+    opts = {},
+    keys = {
+      {
+        '<leader>?',
+        function() require('which-key').show({ global = false }) end,
+        desc = 'Buffer Local Keymaps',
+      },
+    },
   },
   {
     'esmuellert/codediff.nvim',
@@ -289,3 +299,10 @@ vim.keymap.set('n', '<leader>pf', function()
   require('telescope.builtin').find_files({ hidden = true, no_ignore = true, file_ignore_patterns = { '.next', 'node_modules', '.git', '__pycache__', '.pytest_cache', '.venv', 'venv', '.DS_Store' } })
 end, { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ps', '<cmd>Telescope live_grep<cr>', { noremap = true, silent = true })
+
+vim.keymap.set('n', 'K', function()
+  require('cpp-docs').hover_with_docs()
+end, { noremap = true, silent = true, desc = 'LSP hover with docs hint' })
+vim.keymap.set('n', '<leader>K', function()
+  require('cpp-docs').open_cppreference()
+end, { noremap = true, silent = true, desc = 'Open cppreference docs' })
