@@ -1,5 +1,7 @@
 local lsp_zero = require('lsp-zero')
 
+vim.env.PATH = vim.fn.stdpath('data') .. '/mason/bin:' .. vim.env.PATH
+
 lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
@@ -9,6 +11,18 @@ require('mason-lspconfig').setup({
   ensure_installed = {'ts_ls', 'clangd', 'gopls', 'pyright'},
   handlers = {
     lsp_zero.default_setup,
+    ['clangd'] = function()
+      require('lspconfig').clangd.setup({
+        cmd = {
+          'clangd',
+          '--background-index',
+          '--clang-tidy',
+          '--header-insertion=iwyu',
+          '--completion-style=detailed',
+          '--pch-storage=memory',
+        },
+      })
+    end,
   }
 })
 
@@ -20,6 +34,9 @@ cmp.setup({
     expand = function(args)
       require('luasnip').lsp_expand(args.body)
     end,
+  },
+  window = {
+    documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
