@@ -163,6 +163,36 @@ require('lazy').setup({
     end,
   },
   {
+    'akinsho/bufferline.nvim',
+    version = '*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    opts = {
+      options = {
+        mode = 'buffers',
+        separator_style = 'thin',
+        always_show_bufferline = true,
+        show_buffer_close_icons = true,
+        show_close_icon = false,
+        diagnostics = 'nvim_lsp',
+        offsets = {
+          {
+            filetype = 'neo-tree',
+            text = 'File Explorer',
+            highlight = 'Directory',
+            separator = true,
+          },
+        },
+      },
+    },
+    keys = {
+      { '<S-h>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev buffer' },
+      { '<S-l>', '<cmd>BufferLineCycleNext<cr>', desc = 'Next buffer' },
+      { '<leader>bd', '<cmd>bdelete<cr>', desc = 'Delete buffer' },
+      { '<leader>bp', '<cmd>BufferLineTogglePin<cr>', desc = 'Pin buffer' },
+      { '<leader>bb', '<cmd>BufferLinePick<cr>', desc = 'Pick buffer' },
+    },
+  },
+  {
     'sainnhe/everforest',
     lazy = false,
     priority = 1000,
