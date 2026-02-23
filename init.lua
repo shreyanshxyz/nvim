@@ -107,6 +107,27 @@ require('lazy').setup({
     },
   },
   {
+    'stevearc/conform.nvim',
+    event = { 'BufWritePre' },
+    cmd = { 'ConformInfo' },
+    opts = {
+      formatters_by_ft = {
+        c = { 'clang-format' },
+        cpp = { 'clang-format' },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
+        json = { 'prettier' },
+        html = { 'prettier' },
+        css = { 'prettier' },
+        lua = { 'stylua' },
+      },
+      format_on_save = {
+        timeout_ms = 500,
+        lsp_fallback = true,
+      },
+    },
+  },
+  {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v3.x',
     dependencies = {
