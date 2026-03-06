@@ -1,9 +1,9 @@
 local M = {}
 
 M.config = {
-  model = 'kimi-k2.5:cloud',
+  model = 'llama3.2:latest',
   ollama_url = 'http://localhost:11434/api/generate',
-  max_diff_size = 4000,
+  max_diff_size = 7000,
 }
 
 local function get_staged_diff()
@@ -148,10 +148,16 @@ function M.ai_commit()
 
   local diff = truncate_diff(get_staged_diff())
 
-  local prompt = [[Generate a concise git commit message for the following staged changes. 
-Follow conventional commits format: type(scope): description
-Types: feat, fix, docs, style, refactor, test, chore
-Keep it under 72 characters. Only output the commit message, nothing else.
+  local prompt = [[Analyze the following staged git changes and generate a commit message.
+
+Requirements:
+- Output ONLY the commit message, nothing else (no explanations, no introductions)
+- Write a commit message with 10-15 words
+- Use conventional commits format: type(scope): description
+- Be specific about WHAT changed and WHY
+- Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build
+
+Example output: feat(lsp): add clangd configuration for C++ autocompletion
 
 Staged changes:
 ]] .. diff
