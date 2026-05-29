@@ -30,6 +30,7 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
 vim.opt.clipboard = 'unnamedplus'
+vim.opt.updatetime = 250
 
 require('lazy').setup({
   {
@@ -342,6 +343,34 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 require('lsp')
+
+vim.diagnostic.config({
+  virtual_text = {
+    spacing = 2,
+    prefix = '●',
+  },
+  signs = {
+    active = {
+      { name = 'DiagnosticSignError', text = '●' },
+      { name = 'DiagnosticSignWarn',  text = '●' },
+      { name = 'DiagnosticSignInfo',  text = '●' },
+      { name = 'DiagnosticSignHint',  text = '●' },
+    },
+  },
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+  },
+})
+
+vim.api.nvim_create_autocmd('CursorHold', {
+  callback = function()
+    vim.diagnostic.open_float(nil, { focusable = false })
+  end,
+})
 
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
