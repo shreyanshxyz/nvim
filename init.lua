@@ -37,12 +37,15 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
+    config = function()
+      require('nvim-treesitter.config').setup({
+        ensure_installed = { 'c', 'cpp', 'go', 'gomod', 'gosum', 'javascript', 'typescript', 'tsx', 'html', 'css', 'json', 'lua', 'python', 'rust', 'bash', 'vim', 'vimdoc' },
+        highlight = { enable = true },
+        indent = { enable = true },
+      })
+    end,
   },
-  {
-    'HiPhish/rainbow-delimiters.nvim',
-    event = { 'BufReadPost', 'BufNewFile' },
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
-  },
+
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
@@ -369,17 +372,6 @@ vim.diagnostic.config({
 vim.api.nvim_create_autocmd('CursorHold', {
   callback = function()
     vim.diagnostic.open_float(nil, { focusable = false })
-  end,
-})
-
-vim.api.nvim_create_autocmd('VimEnter', {
-  callback = function()
-    vim.schedule(function()
-      require('nvim-treesitter.config').setup({
-        highlight = { enable = true },
-        indent = { enable = true },
-      })
-    end)
   end,
 })
 
