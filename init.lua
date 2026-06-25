@@ -527,6 +527,20 @@ vim.api.nvim_create_autocmd("CursorHold", {
 	end,
 })
 
+vim.keymap.set("n", "<leader>d", function()
+	local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
+	if #diagnostics > 0 then
+		local lines = {}
+		for i, d in ipairs(diagnostics) do
+			local prefix = d.source and (d.source .. ": ") or ""
+			table.insert(lines, i .. ". " .. prefix .. d.message)
+		end
+		local text = table.concat(lines, "\n")
+		vim.fn.setreg("+", text)
+		vim.notify("Copied " .. #diagnostics .. " diagnostic(s)", vim.log.levels.INFO)
+	end
+end, { noremap = true, silent = true, desc = "Copy diagnostic under cursor" })
+
 vim.keymap.set("n", "<leader>pf", function()
 	require("telescope.builtin").find_files({
 		hidden = true,
