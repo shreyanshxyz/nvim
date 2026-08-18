@@ -141,6 +141,7 @@ require("lazy").setup({
 				html = { "prettier" },
 				css = { "prettier" },
 				lua = { "stylua" },
+				rust = { "rustfmt", lsp_format = "fallback" },
 			},
 			format_on_save = {
 				timeout_ms = 500,
@@ -439,6 +440,27 @@ require("lazy").setup({
 			},
 		},
 	},
+	{
+		"saecki/crates.nvim",
+		tag = "stable",
+		event = { "BufRead Cargo.toml" },
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("crates").setup({
+				lsp = {
+					enabled = true,
+					actions = true,
+					completion = true,
+					hover = true,
+				},
+				completion = {
+					cmp = {
+						enabled = true,
+					},
+				},
+			})
+		end,
+	},
 })
 
 vim.keymap.set("n", "<leader>e", ":Neotree toggle position=left<CR>", { noremap = true, silent = true })
@@ -494,6 +516,30 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
 		vim.opt_local.wrap = true
 		vim.opt_local.linebreak = true
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufRead", {
+	group = vim.api.nvim_create_augroup("CmpSourceCargo", { clear = true }),
+	pattern = "Cargo.toml",
+	callback = function()
+		require("cmp").setup.buffer({
+			sources = {
+				{ name = "crates" },
+				{ name = "nvim_lsp" },
+				{ name = "luasnip" },
+			},
+		})
+	end,
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("RustInlayHints", { clear = true }),
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if client and client.name == "rust-analyzer" then
+			vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+		end
 	end,
 })
 

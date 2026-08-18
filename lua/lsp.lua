@@ -8,7 +8,7 @@ end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = {'ts_ls', 'clangd', 'gopls', 'pyright'},
+  ensure_installed = {'ts_ls', 'clangd', 'gopls', 'pyright', 'rust-analyzer'},
   handlers = {
     lsp_zero.default_setup,
     ['clangd'] = function()
@@ -20,6 +20,18 @@ require('mason-lspconfig').setup({
           '--header-insertion=iwyu',
           '--completion-style=detailed',
           '--pch-storage=memory',
+        },
+      })
+    end,
+    ['rust-analyzer'] = function()
+      require('lspconfig').rust_analyzer.setup({
+        settings = {
+          ['rust-analyzer'] = {
+            procMacro = { enable = true },
+            cargo = {
+              buildScripts = { enable = true },
+            },
+          },
         },
       })
     end,
