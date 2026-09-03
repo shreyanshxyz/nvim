@@ -1,6 +1,11 @@
 local lsp_zero = require('lsp-zero')
 
-vim.env.PATH = vim.fn.stdpath('data') .. '/mason/bin:' .. vim.env.PATH
+local mise_shims = vim.fn.expand('~/.local/share/mise/shims')
+vim.env.PATH = table.concat({
+  vim.fn.stdpath('data') .. '/mason/bin',
+  mise_shims,
+  vim.env.PATH,
+}, ':')
 
 lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
