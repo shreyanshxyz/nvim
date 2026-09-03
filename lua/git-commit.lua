@@ -1,7 +1,7 @@
 local M = {}
 
 M.config = {
-  model = 'llama3.2:latest',
+  model = 'gemma4:e2b',
   ollama_url = 'http://localhost:11434/api/generate',
   max_diff_size = 7000,
 }
