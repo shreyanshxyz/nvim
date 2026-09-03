@@ -119,11 +119,21 @@ require("lazy").setup({
 		"williamboman/mason-lspconfig.nvim",
 	},
 	{
+		"L3MON4D3/LuaSnip",
+		version = "v2.*",
+		dependencies = { "rafamadriz/friendly-snippets" },
+		config = function()
+			require("luasnip.loaders.from_vscode").lazy_load()
+			require("luasnip.loaders.from_vscode").lazy_load({
+				paths = { vim.fn.stdpath("config") .. "/snippets" },
+			})
+		end,
+	},
+	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
 		dependencies = {
 			"saadparwaiz1/cmp_luasnip",
-			"l3mon4d3/luasnip",
 			"hrsh7th/cmp-nvim-lsp",
 		},
 	},
@@ -179,6 +189,7 @@ require("lazy").setup({
 					},
 					follow_current_file = { enabled = true },
 					hijack_netrw_behavior = "disabled",
+					use_libuv_file_watcher = true,
 				},
 				window = {
 					position = "left",
@@ -465,6 +476,17 @@ require("lazy").setup({
 
 vim.keymap.set("n", "<leader>e", ":Neotree toggle position=left<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>o", ":Neotree reveal position=left<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>er", function()
+	require("neo-tree.sources.manager").refresh("filesystem")
+end, { noremap = true, silent = true, desc = "Refresh neo-tree" })
+
+vim.api.nvim_create_autocmd({ "FocusGained", "TermClose" }, {
+	callback = function()
+		pcall(function()
+			require("neo-tree.sources.manager").refresh("filesystem")
+		end)
+	end,
+})
 vim.keymap.set({ "n", "v" }, "<C-c>", '"+y', { noremap = true, silent = true })
 vim.keymap.set("n", "<C-x>", '"+dd', { noremap = true, silent = true })
 vim.keymap.set("v", "<C-x>", '"+x', { noremap = true, silent = true })
